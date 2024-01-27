@@ -17,7 +17,7 @@ class GameController {
   }
 
   audioInit() {
-   return getPlayer();
+    return getPlayer();
   }
 
   // Method to start a new game
@@ -37,48 +37,41 @@ class GameController {
       stopSong();
     }, 15_000);
 
-    this.timer()
+    this.timer();
   }
 
   // Method to check if the user's guess is correct
-  checkGuess(guess,author) {
-    return new Promise((resolve, reject) => {
-        if (this.state === "idle") return reject("No game is currently running!");
-        if (guess.toLowerCase() === this.songName.toLowerCase()) {
-            if (!this.points[author.id]) {
-                this.points[author.id] = 1;
-            } else {
-                this.points[author.id]++;
-            }
-            this.state = "idle";
-            this.secs = 25;
-            
-            return resolve("You guessed correctly!");
-        }
-    });
+  checkGuess(message) {
+    const { content, author } = message;
+    if (this.state === "idle") return;
+    if (content.toLowerCase() === this.songName.toLowerCase()) {
+      if (!this.points[author.id]) {
+        this.points[author.id] = 1;
+      } else {
+        this.points[author.id]++;
+      }
+      this.state = "idle";
+      this.secs = 25;
+      //message.delete();
+      message.channel.send(message.author.username + " got it right!");
+    }
   }
 
   timer() {
-    if(this.state==="idle") return;
-    if(this.secs===10){
-        this.channel.send("**10 seconds left!**");
-    }else
-    if(this.secs<10){
-        this.channel.send("**"+this.secs+"**");
+    if (this.state === "idle") return;
+    if (this.secs === 10) {
+      this.channel.send("**10 seconds left!**");
+    } else if (this.secs < 10) {
+      this.channel.send("**" + this.secs + "**");
     }
     this.secs--;
-    if (this.secs<=0){
-        this.secs = 25;
-        this.state = "idle";
-        this.channel.send("Time's up! The game was ***" + this.songName+"***")
-        return;
-    }
-    else return new Promise(() => setTimeout(() => this.timer(), 1000));
+    if (this.secs <= 0) {
+      this.secs = 25;
+      this.state = "idle";
+      this.channel.send("Time's up! The game was ***" + this.songName + "***");
+      return;
+    } else return new Promise(() => setTimeout(() => this.timer(), 1000));
   }
-
-  
-
-  
 }
 
 module.exports = GameController;

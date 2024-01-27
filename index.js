@@ -12,7 +12,6 @@ require("dotenv").config();
 
 const { joinVoiceChannel } = require("@discordjs/voice");
 
-
 const GameController = require("./game_controller.js");
 var game = new GameController();
 const player = game.audioInit();
@@ -51,45 +50,25 @@ client.on(Events.MessageCreate, (message) => {
       if (connection && connection._state.status !== "destroyed")
         connection.destroy();
       if (subscription) subscription.unsubscribe();
+      connection = null;
       break;
-    
+
     case "points":
-        const userScores = Object.entries(game.points);
-        userScores.forEach(([userId, score]) => {
-            const user = client.users.cache.get(userId);
-            if (user) {
-                message.channel.send(`${user.username}: ${score}`);
-            }
-        });
-        break;
+      const userScores = Object.entries(game.points);
+      userScores.forEach(([userId, score]) => {
+        const user = client.users.cache.get(userId);
+        if (user) {
+          message.channel.send(`${user.username}: ${score}`);
+        }
+      });
+      break;
 
     default:
       if (!connection) return;
-      game
-        .checkGuess(message.content, message.author)
-        .then((result) => {
-          message.reply(result);
-        })
-        .catch((err) => {
-          message.reply(err);
-        });
+      game.checkGuess(message);
+
       break;
   }
 });
-process.on("SIGINT", () => {
-    if (connection && connection._state.status !== "destroyed") {
-        connection.destroy();
-    }
-    if (subscription) {
-        subscription.unsubscribe();
-    }
-    process.exit(0);
-});
 
 client.login(process.env.TOKEN);
-
-
-
-
-
-
