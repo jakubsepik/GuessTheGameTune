@@ -26,6 +26,7 @@ client.on(Events.MessageCreate, (message) => {
 
   switch (message.content) {
     case "start":
+      if(!message.member.hasPermission("ADMINISTRATOR")) return
       const channel = client.guilds.cache
         .get(message.guildId)
         .members.cache.get(message.author.id).voice.channel;
@@ -42,11 +43,13 @@ client.on(Events.MessageCreate, (message) => {
       break;
 
     case "play":
+      if(!message.member.hasPermission("ADMINISTRATOR")) return
       if (!connection) return;
       game.playSong();
       break;
 
     case "stop":
+      if(!message.member.hasPermission("ADMINISTRATOR")) return
       if (connection && connection._state.status !== "destroyed")
         connection.destroy();
       if (subscription) subscription.unsubscribe();
@@ -54,6 +57,7 @@ client.on(Events.MessageCreate, (message) => {
       break;
 
     case "points":
+      if(!message.member.hasPermission("ADMINISTRATOR")) return
       const userScores = Object.entries(game.points);
       userScores.forEach(([userId, score]) => {
         const user = client.users.cache.get(userId);
