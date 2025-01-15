@@ -1,16 +1,16 @@
-Minecraft
-Hitman
-Bad piggies
-Subway Surfers
+minecraft
+hitman
+bad piggies
+subway surfers
 broforce
 papers please
 rimworld
-binding of isacs
-Doom
-Watchdogs
-Apex Legends
-PUBG
-Lethal company
+binding of isaac
+doom
+watchdogs
+apex legends
+pubg
+lethal company
 sea of thieves
 stronghold
 diablo
@@ -49,3 +49,4 @@ hollow knight
 outlast
 bordellands
 plants vs zombies
+dark souls
